@@ -89,7 +89,17 @@ selectDesign.addEventListener("change", (event) => {
 });
 
 //if workshop selected, disable workshops during same time slots
+var activities = document.querySelectorAll('.activities input');
+console.log(activities);
 
+document.querySelector('.activities').addEventListener('change', (event) => {
+    var selected = event.target;
+    console.log(selected);
+    var selectedTime = event.target.getAttribute('data-day-and-time');
+    console.log(selectedTime);
+    var selectedCost = event.target.getAttribute('data-cost');
+    console.log(selectedCost);
+});
 //if workshop unselectd, enable workshops
 
 //update conference costs based on selections
