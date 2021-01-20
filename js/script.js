@@ -79,18 +79,4 @@ selectDesign.addEventListener("change", (event) => {
     }
 });
 
-// for (var i = 0; i < selectColorOptions.length; i++) {
-//     var optionValue = selectColorOptions[i].value;
-//     console.log(optionValue);
-    // if (optionValue == null) {
-    //     selectColorOptions[i].hidden = true;
-    // } else {
-    //     selectColorOptions[i].hidden = false;
-    // }
-//}
-
-// selectDesign.addEventListener("change", (event) => {
-    
-// });
-
 hideColorOptions();
