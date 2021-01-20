@@ -39,14 +39,31 @@ var colorDefault = document.createElement('option');
 colorDefault.textContent = "Please select a T-shirt theme";
 selectColor.prepend(colorDefault);
 var selectColorOptions = document.querySelectorAll('#shirt-colors option');
-selectColorOptions[0].selected = true;
 
-//hide "Color" options
-for (var i = 0; i < selectColorOptions.length; i++) {
-    var optionValue = selectColorOptions[i].value;
-    if (optionValue !== "Please select a T-shirt theme") {
-        selectColorOptions[i].hidden = true;
+//function to hide "Color" options until theme selected
+
+function hideColorOptions() {
+    selectColorOptions[0].selected = true;
+    for (var i = 0; i < selectColorOptions.length; i++) {
+        var optionValue = selectColorOptions[i].value;
+        if (optionValue !== "Please select a T-shirt theme") {
+            selectColorOptions[i].hidden = true;
+        }
     }
+}
+
+//function to show/hide "Color" options
+function showColorOptions(optStart, optA, optB, optC) {
+    selectColorOptions[optStart].selected = true;
+        for (var i = 0; i < selectColorOptions.length; i++) {
+            var optionValue = selectColorOptions[i].value;
+            console.log(optionValue);
+            if (optionValue == optA || optionValue == optB || optionValue == optC) {
+                selectColorOptions[i].hidden = false;
+            } else {
+                selectColorOptions[i].hidden = true;
+            }
+        }
 }
 
 //add event listener to show colors when design theme selected
@@ -54,35 +71,11 @@ selectDesign.addEventListener("change", (event) => {
     //show "JS Puns" theme colors
     var designValue = event.target.value;
     if (designValue == "js puns") {
-        selectColorOptions[1].selected = true;
-        for (var i = 0; i < selectColorOptions.length; i++) {
-            var optionValue = selectColorOptions[i].value;
-            console.log(optionValue);
-            if (optionValue == "cornflowerblue" || optionValue == "darkslategrey" || optionValue == "gold") {
-                selectColorOptions[i].hidden = false;
-            } else {
-                selectColorOptions[i].hidden = true;
-            }
-        }
+        showColorOptions(1, "cornflowerblue", "darkslategrey", "gold");
     } else if (designValue == "heart js") {
-        selectColorOptions[4].selected = true;
-        for (var i = 0; i < selectColorOptions.length; i++) {
-            var optionValue = selectColorOptions[i].value;
-            console.log(optionValue);
-            if (optionValue == "tomato" || optionValue == "steelblue" || optionValue == "dimgrey") {
-                selectColorOptions[i].hidden = false;
-            } else {
-                selectColorOptions[i].hidden = true;
-            }
-        }
+        showColorOptions(4, "tomato", "steelblue", "dimgrey");
     } else {
-        selectColorOptions[0].selected = true;
-        for (var i = 0; i < selectColorOptions.length; i++) {
-            var optionValue = selectColorOptions[i].value;
-            if (optionValue !== "Please select a T-shirt theme") {
-                selectColorOptions[i].hidden = true;
-            }
-        }
+        hideColorOptions();
     }
 });
 
@@ -100,3 +93,4 @@ selectDesign.addEventListener("change", (event) => {
     
 // });
 
+hideColorOptions();
