@@ -7,13 +7,16 @@ var selectColor = document.getElementById('color');
 var selectDesign = document.getElementById('design');
 var otherTitle = document.getElementById('other-title');
 
+//declare global variables
+var selectColorOptions;
+
 //set the focus to first input
 window.onload = function getFocus() {
     inputName.focus();
 }
 
 //function to create form element
-function createFormElement(elementName, type, id, name, placeholder) {
+var createFormElement = (elementName, type, id, name, placeholder) => {
     var element = document.createElement(elementName);
     element.setAttribute("type", type);
     element.id = id;
@@ -34,15 +37,19 @@ selectTitle.addEventListener("change", (event) => {
     }
 });
 
-//set "Color" field to "Please select a T-shirt theme" by default
-var colorDefault = document.createElement('option');
-colorDefault.textContent = "Please select a T-shirt theme";
-selectColor.prepend(colorDefault);
-var selectColorOptions = document.querySelectorAll('#shirt-colors option');
+//function to create "Color" default
+var createColorDefault = () => {
+    //set "Color" field to "Please select a T-shirt theme" by default
+    var colorDefault = document.createElement('option');
+    colorDefault.textContent = "Please select a T-shirt theme";
+    selectColor.prepend(colorDefault);
+    //select all options once default is added
+    selectColorOptions = document.querySelectorAll('#shirt-colors option');
+    return selectColorOptions;
+}
 
 //function to hide "Color" options until theme selected
-
-function hideColorOptions() {
+var hideColorOptions = () => {
     selectColorOptions[0].selected = true;
     for (var i = 0; i < selectColorOptions.length; i++) {
         var optionValue = selectColorOptions[i].value;
@@ -53,7 +60,7 @@ function hideColorOptions() {
 }
 
 //function to show/hide "Color" options
-function showColorOptions(optStart, optA, optB, optC) {
+var showColorOptions = (optStart, optA, optB, optC) => {
     selectColorOptions[optStart].selected = true;
         for (var i = 0; i < selectColorOptions.length; i++) {
             var optionValue = selectColorOptions[i].value;
@@ -79,4 +86,11 @@ selectDesign.addEventListener("change", (event) => {
     }
 });
 
+//if workshop selected, disable workshops during same time slots
+
+//if workshop unselectd, enable workshops
+
+//update conference costs based on selections
+
+createColorDefault();
 hideColorOptions();
