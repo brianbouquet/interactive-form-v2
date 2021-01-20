@@ -25,15 +25,17 @@ var createFormElement = (elementName, type, id, name, placeholder) => {
     return element;
 }
 
-//initially hide "other" job title input
-otherTitle.hidden = true;
+//function to initially hide "Otherther" job title input
+var hideOtherTitle = () => {
+    otherTitle.hidden = true;
+}
 
-//check job title value for other and show/hide input
+//check job title value for "Other" and show/hide input
 selectTitle.addEventListener("change", (event) => {
     if (event.target.value == "other") {
         otherTitle.hidden = false;
     } else {
-        otherTitle.hidden = true;
+        hideOtherTitle();
     }
 });
 
@@ -92,5 +94,6 @@ selectDesign.addEventListener("change", (event) => {
 
 //update conference costs based on selections
 
+hideOtherTitle();
 createColorDefault();
 hideColorOptions();
