@@ -6,6 +6,8 @@ var selectSize = document.getElementById('size');
 var selectColor = document.getElementById('color');
 var selectDesign = document.getElementById('design');
 var otherTitle = document.getElementById('other-title');
+var activities = document.querySelector('.activities');
+var activityCheckboxes = document.querySelectorAll('.activities input');
 
 //declare global variables
 var selectColorOptions;
@@ -16,13 +18,14 @@ window.onload = function getFocus() {
 }
 
 //function to create form element
-var createFormElement = (elementName, type, id, name, placeholder) => {
+var createElement = (elementName) => {
     var element = document.createElement(elementName);
-    element.setAttribute("type", type);
-    element.id = id;
-    element.setAttribute("name", name);
-    element.setAttribute("placeholder", placeholder);
     return element;
+}
+
+//append element to parent element
+var appendElement = (element, parentNode) => {
+    parentNode.appendChild(element);
 }
 
 //function to initially hide "Otherther" job title input
@@ -88,18 +91,57 @@ selectDesign.addEventListener("change", (event) => {
     }
 });
 
-//if workshop selected, disable workshops during same time slots
-var activities = document.querySelectorAll('.activities input');
-console.log(activities);
+//create an element to display the total activity cost
+var createActivityCost = () => {
+    var costDiv = createElement('div');
+    costDiv.id = "activity-cost";
+    costDiv.className = "activity-cost";
+    appendElement(costDiv, activities);
+    var costLabel = createElement('label');
+    costLabel.textContent = 'Total Cost:';
+    appendElement(costLabel, costDiv);
+    var costTotal = createElement('p');
+    costTotal.className = 'cost-total';
+    costTotal.textContent = '$500';
+    appendElement(costTotal, costDiv);
+}
 
-document.querySelector('.activities').addEventListener('change', (event) => {
+//Listen for changes to the activity section
+activities.addEventListener("change", (event) => {
+    //store information for input(s) selected
     var selected = event.target;
     console.log(selected);
-    var selectedTime = event.target.getAttribute('data-day-and-time');
-    console.log(selectedTime);
-    var selectedCost = event.target.getAttribute('data-cost');
-    console.log(selectedCost);
+    var activityDate = event.target.getAttribute('data-day-and-time');
+    console.log(activityDate);
+    var activityCost = event.target.getAttribute('data-cost');
+    console.log(activityCost);
+    if (selected) {
+        var cost = parseInt(activityCost)
+        var total = total + cost;
+
+        console.log(total);
+        document.querySelector('.cost-total').textContent = total;
+    }
 });
+
+//create helpful variables to store important values
+
+//update and display the total activity cost
+
+//disable conflicting activities
+
+// //if workshop selected, disable workshops during same time slots
+// var activities = document.querySelectorAll('.activities input');
+// console.log(activities);
+
+// document.querySelector('.activities').addEventListener('change', (event) => {
+//     var selected = event.target;
+//     console.log(selected);
+//     var selectedTime = event.target.getAttribute('data-day-and-time');
+//     console.log(selectedTime);
+//     var selectedCost = event.target.getAttribute('data-cost');
+//     console.log(selectedCost);
+// });
 //if workshop unselectd, enable workshops
 
 //update conference costs based on selections
@@ -107,3 +149,4 @@ document.querySelector('.activities').addEventListener('change', (event) => {
 hideOtherTitle();
 createColorDefault();
 hideColorOptions();
+createActivityCost();
