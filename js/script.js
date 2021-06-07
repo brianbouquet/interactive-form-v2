@@ -16,8 +16,9 @@ var creditCard = document.querySelector('.credit-card');
 var selectColorOptions;
 
 //set the focus to first input
-window.onload = function getFocus() {
+window.onload = function() {
     inputName.focus();
+    payment.value = 'credit card';
 }
 
 //function to create form element
@@ -91,8 +92,6 @@ var hideSelectLabel = () => {
     for (var i = 0; i < paymentOptions.length; i++) {
         if (paymentOptions[i].value === 'select method') {
             paymentOptions[i].disabled = true;
-        } else {
-            paymentOptions[i].disabled = false;
         }
     }
 }
@@ -218,7 +217,7 @@ var isValidEmail = () => {
     console.log(emailValue);
     var indexOfAt = emailValue.indexOf('@');
     var lastIndexOfDot = emailValue.lastIndexOf('.');
-    if (indexOfAt > 1 && lastIndexOfDot > indexOfAt + 1) {
+    if (indexOfAt >= 1 && lastIndexOfDot > indexOfAt + 1) {
         return true
     } else {
         inputEmail.className = 'invalid';
@@ -326,3 +325,4 @@ createColorDefault();
 hideColorOptions();
 createActivityCost();
 hideMethods();
+hideSelectLabel();
