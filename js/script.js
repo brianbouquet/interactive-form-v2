@@ -1,7 +1,12 @@
+//declare global variables
+var selectColorOptions;
+var shirtColors;
+
 //select form elements
-var inputName = document.getElementById('name');
+var inputName = document.querySelector('#name');
 var inputEmail = document.getElementById('mail');
 var selectTitle = document.getElementById('title');
+var shirtColors = document.querySelector('#shirt-colors');
 var selectSize = document.getElementById('size');
 var selectColor = document.getElementById('color');
 var selectDesign = document.getElementById('design');
@@ -10,18 +15,17 @@ var activityCheckboxes = document.querySelectorAll('.activities input');
 var payment = document.querySelector('#payment');
 var paymentOptions = document.querySelectorAll('#payment > option');
 var creditCard = document.querySelector('.credit-card');
-
-
-//declare global variables
-var selectColorOptions;
+var inputZipcode = document.querySelector('#zip');
+var inputCVV = document.querySelector('#cvv');
+var inputOtherTitle = document.querySelector('#other-title');
 
 //set the focus to first input
-window.onload = function() {
+window.onload = () => {
     inputName.focus();
     payment.value = 'credit card';
 }
 
-//function to create form element
+//function to create element
 var createElement = (elementName) => {
     var element = document.createElement(elementName);
     return element;
@@ -45,10 +49,8 @@ var showHideElement = (show, element) => {
 selectTitle.addEventListener("change", (event) => {
     if (event.target.value == "other") {
         showHideElement(true, document.querySelector('#other-title'));
-        //otherTitle.hidden = false;
     } else {
         showHideElement(false, document.querySelector('#other-title'));
-        //hideOtherTitle();
     }
 });
 
@@ -63,7 +65,7 @@ var createColorDefault = () => {
     return selectColorOptions;
 }
 
-//function to hide "Color" options until theme selected
+//function to hide "Color" options until theme selected (requirement #5)
 var hideColorOptions = () => {
     selectColorOptions[0].selected = true;
     for (var i = 0; i < selectColorOptions.length; i++) {
@@ -71,6 +73,16 @@ var hideColorOptions = () => {
         if (optionValue !== "Please select a T-shirt theme") {
             showHideElement(false, selectColorOptions[i]);
         }
+    }
+}
+
+//function to hide color label and select menu until theme selected (extra credit, requirement #1)
+var hideColorDiv = () => { 
+    var selectDesignOptions = document.querySelectorAll('#design option');
+    if (selectDesignOptions[0].selected) {
+        showHideElement(false, shirtColors);
+    } else {
+        showHideElement(true, shirtColors);
     }
 }
 
@@ -209,19 +221,37 @@ var isValidName = () => {
     }
 }
 
-//function to validate email
+//function to validate email (could have also tested regex /^[^@]+@[^@]+\.[^@]+$/)
 var isValidEmail = () => {
     removeError('.error-message.email');
     inputEmail.classList.remove('invalid');
     var emailValue = inputEmail.value;
-    console.log(emailValue);
     var indexOfAt = emailValue.indexOf('@');
     var lastIndexOfDot = emailValue.lastIndexOf('.');
-    if (indexOfAt >= 1 && lastIndexOfDot > indexOfAt + 1) {
+    //used similar pattern from warm up example below
+    //plus conditional validation logic for empty vs. invalid
+    if (indexOfAt >= 1 && lastIndexOfDot > indexOfAt + 1 && /[^\.]+$/.test(emailValue)) {
         return true
+    } else if (emailValue === ""){
+        inputEmail.className = 'invalid';
+        displayError(inputEmail, 'Please enter an email address.', 'afterend', 'error-message email')
+        return false;
     } else {
         inputEmail.className = 'invalid';
-        displayError(inputEmail, 'Please enter a valid email address.', 'afterend', 'error-message email')
+        displayError(inputEmail, 'Please enter a valid email address (e.g. name@email.com).', 'afterend', 'error-message email')
+        return false;
+    }
+}
+
+var isValidOtherTitle = () => {
+    removeError('.error-message.other-title');
+    inputOtherTitle.classList.remove('invalid');
+    var otherTitleValue = inputOtherTitle.value;
+    if (/^[a-zA-Z]+/.test(otherTitleValue)) {
+        return true;
+    } else {
+        inputOtherTitle.className = 'invalid';
+        displayError(inputOtherTitle, 'Please enter your title.', 'afterend', 'error-message other-title');
         return false;
     }
 }
@@ -253,7 +283,7 @@ var isValidCardNumber = () => {
     removeError('.error-message.cc');
     document.querySelector('#cc-num').classList.remove('invalid');
     var cardNumber = document.querySelector('#cc-num').value;
-    if (/[0-9]{13,16}/.test(cardNumber)) {
+    if (/^[0-9]{13,16}$/.test(cardNumber)) {
         return true;
     } else {
         document.querySelector('#cc-num').className = 'invalid';
@@ -267,7 +297,7 @@ var isValidZipCode = () => {
     removeError('.error-message.zip');
     document.querySelector('#zip').classList.remove('invalid');
     var zipCode = document.querySelector('#zip').value;
-    if (/[0-9]{5}/.test(zipCode)) {
+    if (/^[0-9]{5}$/.test(zipCode)) {
         return true;
     } else {
         document.querySelector('#zip').className = 'invalid';
@@ -281,7 +311,7 @@ var isValidCardCVV = () => {
     removeError('.error-message.cvv');
     document.querySelector('#cvv').classList.remove('invalid');
     var cvv = document.querySelector('#cvv').value;
-    if (/[0-9]{3}/.test(cvv)) {
+    if (/^[0-9]{3}$/.test(cvv)) {
         return true;
     } else {
         document.querySelector('#cvv').className = 'invalid';
@@ -290,7 +320,7 @@ var isValidCardCVV = () => {
     }
 }
 
-//add event listener to prevent form submission based on validation errors
+//event listener to prevent form submission based on validation errors
 document.querySelector('form').addEventListener('submit', (event) => {
     if (!isValidName()) {
         event.preventDefault();
@@ -300,9 +330,13 @@ document.querySelector('form').addEventListener('submit', (event) => {
         event.preventDefault();
         console.log('Email is invalid.');
     }
+    if (!isValidOtherTitle()){
+        event.preventDefault();
+        console.log('Other Title is invalid.')
+    }
     if (!isValidActivity()) {
         event.preventDefault();
-        console.log('Activity not selected.');
+        console.log('No activities selected');
     }
     if (payment.value === 'credit card') {
         if (!isValidCardNumber()) {
@@ -320,9 +354,60 @@ document.querySelector('form').addEventListener('submit', (event) => {
     }
 });
 
+//event listener to validate name as user types
+inputName.addEventListener('keyup', (event) => {
+    if (!isValidName()) {
+        console.log('Name is invalid.');
+    }
+});
+
+//event listerner to validate email as user types
+inputEmail.addEventListener('keyup', (event) => {
+    !isValidEmail()
+});
+
+//event listerner to validate email as user types
+inputOtherTitle.addEventListener('keyup', (event) => {
+    !isValidOtherTitle()
+});
+
+//event listener to validate activities on change
+activities.addEventListener('change', (event) => {
+    if (!isValidActivity()) {
+        console.log('No activities selected.');
+    }
+});
+
+//event listener to validate credit card as user types
+creditCard.addEventListener('keyup', (event) => {
+        if (!isValidCardNumber()) {
+            console.log('Card number is invalid.');
+        }
+});
+
+//event listener to validate zip code as user types
+inputZipcode.addEventListener('keyup', (event) => {
+    if (!isValidZipCode()) {
+        console.log('Zip code is invalid.');
+    }
+});
+
+//event listener to validate CVV as user types
+inputCVV.addEventListener('keyup', (event) => {
+    if (!isValidCardCVV()) {
+        console.log('CVV is invalid');
+    }
+});
+
+//event listener to hide colors when no theme is selected
+selectDesign.addEventListener('change', (event) => {
+    hideColorDiv();
+})
+
 showHideElement(false, document.querySelector('#other-title'));
 createColorDefault();
 hideColorOptions();
+hideColorDiv();
 createActivityCost();
 hideMethods();
 hideSelectLabel();
