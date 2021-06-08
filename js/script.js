@@ -285,9 +285,13 @@ var isValidCardNumber = () => {
     var cardNumber = document.querySelector('#cc-num').value;
     if (/^[0-9]{13,16}$/.test(cardNumber)) {
         return true;
+    } else if (cardNumber === "") {
+        document.querySelector('#cc-num').className = 'invalid';
+        displayError(creditCard, "Please enter your credit card number.", 'beforeend', 'error-message cc');
+        return false;
     } else {
         document.querySelector('#cc-num').className = 'invalid';
-        displayError(creditCard, "Please enter a valid credit card number.", 'beforeend', 'error-message cc');
+        displayError(creditCard, "Please enter a valid credit card number (between 13 - 16 digits).", 'beforeend', 'error-message cc');
         return false;
     }
 }
@@ -299,9 +303,13 @@ var isValidZipCode = () => {
     var zipCode = document.querySelector('#zip').value;
     if (/^[0-9]{5}$/.test(zipCode)) {
         return true;
+    } else if (zipCode === "") {
+        document.querySelector('#zip').className = 'invalid';
+        displayError(creditCard, "Please enter your zip code.", 'beforeend', 'error-message zip');
+        return false;
     } else {
         document.querySelector('#zip').className = 'invalid';
-        displayError(creditCard, "Please enter a valid zip code.", 'beforeend', 'error-message zip');
+        displayError(creditCard, "Please enter a valid 5-digit zip code.", 'beforeend', 'error-message zip');
         return false;
     }
 }
@@ -313,9 +321,13 @@ var isValidCardCVV = () => {
     var cvv = document.querySelector('#cvv').value;
     if (/^[0-9]{3}$/.test(cvv)) {
         return true;
+    } else if (cvv === "") {
+        document.querySelector('#cvv').className = 'invalid';
+        displayError(creditCard, "Please enter your credit card verification value (CVV).", 'beforeend', 'error-message cvv');
+        return false;
     } else {
         document.querySelector('#cvv').className = 'invalid';
-        displayError(creditCard, "Please enter a valid card verification value (CVV).", 'beforeend', 'error-message cvv');
+        displayError(creditCard, "Please enter a valid 3-digit card verification value (CVV).", 'beforeend', 'error-message cvv');
         return false;
     }
 }
