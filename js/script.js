@@ -342,9 +342,11 @@ document.querySelector('form').addEventListener('submit', (event) => {
         event.preventDefault();
         console.log('Email is invalid.');
     }
-    if (!isValidOtherTitle()){
-        event.preventDefault();
-        console.log('Other Title is invalid.')
+    if (selectTitle.value === 'other') {
+        if (!isValidOtherTitle()){
+            event.preventDefault();
+            console.log('Other Title is invalid.')
+        }
     }
     if (!isValidActivity()) {
         event.preventDefault();
